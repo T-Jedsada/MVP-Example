@@ -10,5 +10,7 @@ class MainView {
 
     interface Presenter extends BaseView.Presenter<MainView.View> {
         void plus(int x, int y);
+
+        int getResultPlus();
     }
 }
