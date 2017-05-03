@@ -1,14 +1,17 @@
 package com.pondthaitay.mvp.example.base;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.pondthaitay.mvp.example.R;
 import com.pondthaitay.mvp.example.exception.MvpNotSetLayoutException;
 import com.pondthaitay.mvp.example.exception.MvpPresenterNotCreateException;
 
 public abstract class BaseActivity<P extends BaseView.Presenter> extends AppCompatActivity implements BaseView.View {
 
     private P presenter;
+    private ProgressDialog progressDialog;
 
     protected abstract P createPresenter();
 
@@ -36,6 +39,7 @@ public abstract class BaseActivity<P extends BaseView.Presenter> extends AppComp
         bindView();
         setupInstance();
         setupView();
+        setupProgressDialog();
         getPresenter().onViewCreate();
         if (savedInstanceState == null) initialize();
     }
@@ -76,4 +80,21 @@ public abstract class BaseActivity<P extends BaseView.Presenter> extends AppComp
         super.onRestoreInstanceState(savedInstanceState);
         restoreView(savedInstanceState);
     }
+
+    @Override
+    public void showProgressDialog() {
+        if (progressDialog != null && !progressDialog.isShowing()) progressDialog.show();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if (progressDialog != null) progressDialog.dismiss();
+    }
+
+    private void setupProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage(getResources().getString(R.string.loading));
+    }
+
 }

@@ -3,6 +3,10 @@ package com.pondthaitay.mvp.example.base;
 public interface BaseView {
     interface View {
         Presenter getPresenter();
+
+        void showProgressDialog();
+
+        void hideProgressDialog();
     }
 
     interface Presenter<V extends BaseView.View> {

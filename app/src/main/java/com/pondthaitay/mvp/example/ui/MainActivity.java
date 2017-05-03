@@ -3,8 +3,10 @@ package com.pondthaitay.mvp.example.ui;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.pondthaitay.mvp.example.R;
 import com.pondthaitay.mvp.example.base.BaseActivity;
+import com.pondthaitay.mvp.example.dao.UserInfoDao;
 
 public class MainActivity extends BaseActivity<MainView.Presenter> implements MainView.View {
 
@@ -42,10 +44,21 @@ public class MainActivity extends BaseActivity<MainView.Presenter> implements Ma
     protected void initialize() {
         getPresenter().plus(5, 5);
         getPresenter().minus(0, 0);
+        getPresenter().getUserInfo("pondthaitay");
     }
 
     @Override
     public void setOnResultPlus(int result) {
         Log.e(MainActivity.class.getName(), "result plus : " + result);
+    }
+
+    @Override
+    public void showUserInfo(UserInfoDao body) {
+        Log.e(MainActivity.class.getName(), new Gson().toJson(body));
+    }
+
+    @Override
+    public void showError(String message) {
+        Log.e(MainActivity.class.getName(), message);
     }
 }
