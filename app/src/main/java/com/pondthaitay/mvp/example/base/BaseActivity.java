@@ -59,7 +59,6 @@ public abstract class BaseActivity<P extends BaseView.Presenter> extends AppComp
         presenter.detachView();
     }
 
-
     @Override
     public P getPresenter() {
         if (presenter != null) return presenter;

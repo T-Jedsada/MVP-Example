@@ -41,6 +41,7 @@ public class MainActivity extends BaseActivity<MainView.Presenter> implements Ma
     @Override
     protected void initialize() {
         getPresenter().plus(5, 5);
+        getPresenter().minus(0, 0);
     }
 
     @Override

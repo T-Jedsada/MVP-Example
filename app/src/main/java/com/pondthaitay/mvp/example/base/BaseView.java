@@ -5,7 +5,6 @@ public interface BaseView {
         Presenter getPresenter();
     }
 
-
     interface Presenter<V extends BaseView.View> {
         void attachView(V mvpView);
 
@@ -20,6 +19,5 @@ public interface BaseView {
         void onViewStart();
 
         void onViewStop();
-
     }
 }

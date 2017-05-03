@@ -2,14 +2,16 @@ package com.pondthaitay.mvp.example.ui;
 
 import com.pondthaitay.mvp.example.base.BaseView;
 
-class MainView {
+public class MainView {
 
-    interface View extends BaseView.View {
+    public interface View extends BaseView.View {
         void setOnResultPlus(int result);
     }
 
-    interface Presenter extends BaseView.Presenter<MainView.View> {
+    public interface Presenter extends BaseView.Presenter<MainView.View> {
         void plus(int x, int y);
+
+        void minus(int... number);
 
         int getResultPlus();
     }
