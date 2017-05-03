@@ -4,7 +4,8 @@ import com.pondthaitay.mvp.example.exception.MvpViewNotAttachedException;
 
 import java.lang.ref.WeakReference;
 
-public abstract class BasePresenter<V extends BaseView.View> implements BaseView.Presenter<V> {
+public abstract class BasePresenter<V extends BaseInterface.View>
+        implements BaseInterface.Presenter<V> {
 
     // View reference. We use as a WeakReference
     // because the Activity could be destroyed at any time

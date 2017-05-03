@@ -7,7 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class JsonMockUtil {
+public class JsonMockUtility {
 
     public <T> T getJsonToMock(String fileName, Class<T> className) {
         String json = getJsonFromResources(fileName);

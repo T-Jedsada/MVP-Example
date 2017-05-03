@@ -8,24 +8,12 @@ import com.pondthaitay.mvp.example.R;
 import com.pondthaitay.mvp.example.exception.MvpNotSetLayoutException;
 import com.pondthaitay.mvp.example.exception.MvpPresenterNotCreateException;
 
-public abstract class BaseActivity<P extends BaseView.Presenter> extends AppCompatActivity implements BaseView.View {
+public abstract class BaseActivity<P extends BaseInterface.Presenter>
+        extends AppCompatActivity
+        implements BaseInterface.View {
 
     private P presenter;
     private ProgressDialog progressDialog;
-
-    protected abstract P createPresenter();
-
-    protected abstract int getLayoutView();
-
-    protected abstract void bindView();
-
-    protected abstract void setupInstance();
-
-    protected abstract void setupView();
-
-    protected abstract void initialize();
-
-    protected abstract void restoreView(Bundle savedInstanceState);
 
     @SuppressWarnings("unchecked")
     @Override
@@ -42,6 +30,16 @@ public abstract class BaseActivity<P extends BaseView.Presenter> extends AppComp
         setupProgressDialog();
         getPresenter().onViewCreate();
         if (savedInstanceState == null) initialize();
+    }
+
+    @Override
+    public void showProgressDialog() {
+        if (progressDialog != null && !progressDialog.isShowing()) progressDialog.show();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if (progressDialog != null) progressDialog.dismiss();
     }
 
     @Override
@@ -63,6 +61,7 @@ public abstract class BaseActivity<P extends BaseView.Presenter> extends AppComp
         presenter.detachView();
     }
 
+
     @Override
     public P getPresenter() {
         if (presenter != null) return presenter;
@@ -81,20 +80,25 @@ public abstract class BaseActivity<P extends BaseView.Presenter> extends AppComp
         restoreView(savedInstanceState);
     }
 
-    @Override
-    public void showProgressDialog() {
-        if (progressDialog != null && !progressDialog.isShowing()) progressDialog.show();
-    }
-
-    @Override
-    public void hideProgressDialog() {
-        if (progressDialog != null) progressDialog.dismiss();
-    }
-
     private void setupProgressDialog() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage(getResources().getString(R.string.loading));
     }
 
+    public void restoreView(Bundle savedInstanceState) {
+    }
+
+    public abstract P createPresenter();
+
+    public abstract int getLayoutView();
+
+    public abstract void bindView();
+
+    public abstract void setupInstance();
+
+    public abstract void setupView();
+
+    public abstract void initialize();
 }
+

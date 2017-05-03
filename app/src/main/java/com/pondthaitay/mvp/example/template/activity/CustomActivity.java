@@ -1,30 +1,28 @@
-package com.pondthaitay.mvp.example.ui;
+package com.pondthaitay.mvp.example.template.activity;
 
 
 import android.os.Bundle;
 
-import com.pondthaitay.mvp.example.R;
 import com.pondthaitay.mvp.example.base.BaseActivity;
-import com.pondthaitay.mvp.example.dao.UserInfoDao;
 
-public class MainActivity extends BaseActivity<MainInterface.Presenter>
-        implements MainInterface.View {
+public class CustomActivity extends BaseActivity<CustomActivityInterface.Presenter>
+        implements CustomActivityInterface.View {
 
 
     @Override
-    public MainInterface.Presenter createPresenter() {
-        return MainPresenter.create();
+    public CustomActivityInterface.Presenter createPresenter() {
+        return CustomActivityPresenter.create();
     }
 
     @Override
     public int getLayoutView() {
-        return R.layout.activity_main;
+        return 0;
     }
 
 
     @Override
     public void bindView() {
-
+        getPresenter().test();
     }
 
     @Override
@@ -38,7 +36,6 @@ public class MainActivity extends BaseActivity<MainInterface.Presenter>
 
     @Override
     public void initialize() {
-        getPresenter().getUserInfo("pondthaitay");
     }
 
     @Override
@@ -50,14 +47,5 @@ public class MainActivity extends BaseActivity<MainInterface.Presenter>
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
-
-    @Override
-    public void setUserInfo(UserInfoDao dao) {
-
-    }
-
-    @Override
-    public void showError(String message) {
-
-    }
 }
+

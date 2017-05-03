@@ -10,29 +10,15 @@ import android.view.ViewGroup;
 import com.pondthaitay.mvp.example.exception.MvpNotSetLayoutException;
 import com.pondthaitay.mvp.example.exception.MvpPresenterNotCreateException;
 
-public abstract class BaseFragment<P extends BaseView.Presenter> extends Fragment implements BaseView.View {
+public abstract class BaseFragment<P extends BaseInterface.Presenter>
+        extends Fragment
+        implements BaseInterface.View {
 
     private P presenter;
 
-    protected abstract P createPresenter();
-
-    protected abstract int getLayoutView();
-
-    protected abstract void bindView(View view);
-
-    protected abstract void setupInstance();
-
-    protected abstract void setupView();
-
-    protected abstract void initialize();
-
-    protected abstract void restoreView(Bundle savedInstanceState);
-
-    protected abstract void onRestoreInstanceState(Bundle savedInstanceState);
-
     @SuppressWarnings("unchecked")
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = createPresenter();
         presenter.attachView(this);
@@ -41,9 +27,10 @@ public abstract class BaseFragment<P extends BaseView.Presenter> extends Fragmen
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        int layoutResId = getLayoutView();
         if (getLayoutView() == 0) throw new MvpNotSetLayoutException();
-        return inflater.inflate(getLayoutView(), container, false);
+        return inflater.inflate(layoutResId, container, false);
     }
 
     @Override
@@ -53,13 +40,21 @@ public abstract class BaseFragment<P extends BaseView.Presenter> extends Fragmen
         setupInstance();
         setupView();
         getPresenter().onViewCreate();
-        if (savedInstanceState == null) initialize();
-        else restoreView(savedInstanceState);
+        if (savedInstanceState == null) {
+            initialize();
+        } else {
+            restoreView(savedInstanceState);
+        }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void showProgressDialog() {
+
+    }
+
+    @Override
+    public void hideProgressDialog() {
+
     }
 
     @Override
@@ -81,9 +76,34 @@ public abstract class BaseFragment<P extends BaseView.Presenter> extends Fragmen
         presenter.detachView();
     }
 
+
     @Override
     public P getPresenter() {
         if (presenter != null) return presenter;
         throw new MvpPresenterNotCreateException();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+    }
+
+    public abstract P createPresenter();
+
+    public abstract int getLayoutView();
+
+    public abstract void bindView(View view);
+
+    public abstract void setupInstance();
+
+    public abstract void setupView();
+
+    public abstract void initialize();
+
+    public void restoreView(Bundle savedInstanceState) {
+    }
 }
+

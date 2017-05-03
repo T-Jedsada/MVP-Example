@@ -1,11 +1,10 @@
-package com.pondthaitay.mvp.example;
+package com.pondthaitay.mvp.example.ui;
 
+import com.pondthaitay.mvp.example.JsonMockUtility;
 import com.pondthaitay.mvp.example.api.GithubApiService;
 import com.pondthaitay.mvp.example.api.GithubServiceManager;
-import com.pondthaitay.mvp.example.base.BaseView;
+import com.pondthaitay.mvp.example.base.BaseInterface;
 import com.pondthaitay.mvp.example.dao.UserInfoDao;
-import com.pondthaitay.mvp.example.ui.MainPresenter;
-import com.pondthaitay.mvp.example.ui.MainView;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,8 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static org.hamcrest.Matchers.any;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -34,28 +32,32 @@ import static org.powermock.api.mockito.PowerMockito.when;
 public class MainPresenterTest {
 
     @Mock
-    private MainView.View mockView;
-    @Mock
-    private GithubApiService mockApi;
+    MainInterface.View mockView;
+    MainPresenter presenter;
+    MainPresenter spyPresenter;
+
     @Captor
     private ArgumentCaptor<Callback<UserInfoDao>> retrofitCallBack;
+
     @Mock
     private Call<UserInfoDao> mockCall;
 
-    private MainPresenter spyPresenter;
-    private JsonMockUtil jsonMockUtil;
+    @Mock
+    private GithubApiService mockApi;
+
     private GithubServiceManager spyManager;
+    private JsonMockUtility jsonUtil;
 
     @Before
     public void setUp() {
-        jsonMockUtil = new JsonMockUtil();
+        jsonUtil = new JsonMockUtility();
         MockitoAnnotations.initMocks(this);
 
         GithubServiceManager manager = GithubServiceManager.getInstance();
         spyManager = spy(manager);
         spyManager.setApi(mockApi);
 
-        MainPresenter presenter = new MainPresenter();
+        presenter = new MainPresenter();
         presenter.setManager(spyManager);
         presenter.attachView(mockView);
         spyPresenter = spy(presenter);
@@ -64,37 +66,37 @@ public class MainPresenterTest {
     }
 
     @Test
-    public void plus() throws Exception {
-        spyPresenter.plus(4, 4);
-        verify(mockView, times(1)).setOnResultPlus(eq(8));
-        assertThat(spyPresenter.getResultPlus(), is(8));
+    public void create_presenter() {
+        assertThat(MainPresenter.create(), is(BaseInterface.Presenter.class));
     }
 
     @Test
-    public void minus() throws Exception {
-        spyPresenter.minus(4, 4);
-        verify(mockView, times(1)).setOnResultPlus(eq(0));
-        assertThat(spyPresenter.getResultPlus(), is(0));
-    }
-
-    @Test
-    public void createPresenter() throws Exception {
-        assertThat(MainPresenter.create(), any(BaseView.Presenter.class));
-    }
-
-    @Test
-    public void getUserInfoSuccess() {
-        UserInfoDao mockResult = jsonMockUtil.getJsonToMock(
-                "user_info_dao_success.json",
+    public void requestBeerProduct_success() {
+        UserInfoDao mockResult = jsonUtil.getJsonToMock(
+                "user_info_success.json",
                 UserInfoDao.class);
-
         Response<UserInfoDao> mockResponse = Response.success(mockResult);
         when(spyManager.requestUserInfoCall(anyString())).thenReturn(mockCall);
-        spyPresenter.getUserInfo("pondthaitay");
+
+        presenter.getUserInfo("");
         verify(mockView, times(1)).showProgressDialog();
-        mockCall.enqueue(retrofitCallBack.capture());
+        verify(mockCall).enqueue(retrofitCallBack.capture());
         retrofitCallBack.getValue().onResponse(mockCall, mockResponse);
         verify(mockView, times(1)).hideProgressDialog();
-        verify(mockView, times(1)).showUserInfo(eq(mockResponse.body()));
+        verify(mockView, times(1)).setUserInfo(eq(mockResult));
+    }
+
+    @SuppressWarnings("ThrowableInstanceNeverThrown")
+    @Test
+    public void requestBeerProduct_failure() {
+        Throwable throwable = new Throwable("error");
+        when(spyManager.requestUserInfoCall(anyString())).thenReturn(mockCall);
+
+        presenter.getUserInfo("");
+        verify(mockView, times(1)).showProgressDialog();
+        verify(mockCall).enqueue(retrofitCallBack.capture());
+        retrofitCallBack.getValue().onFailure(mockCall, throwable);
+        verify(mockView, times(1)).hideProgressDialog();
+        verify(mockView, times(1)).showError(eq(throwable.getMessage()));
     }
 }
