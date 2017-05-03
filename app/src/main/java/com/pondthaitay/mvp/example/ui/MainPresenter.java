@@ -1,13 +1,13 @@
 package com.pondthaitay.mvp.example.ui;
 
 import com.pondthaitay.mvp.example.Calculator;
-import com.pondthaitay.mvp.example.api.GithubManager;
+import com.pondthaitay.mvp.example.api.GithubServiceManager;
 import com.pondthaitay.mvp.example.base.BasePresenter;
 import com.pondthaitay.mvp.example.dao.UserInfoDao;
 
 public class MainPresenter extends BasePresenter<MainView.View> implements MainView.Presenter {
 
-    private GithubManager serviceManager;
+    private GithubServiceManager serviceManager;
     private int resultPlus;
 
     public static MainView.Presenter create() {
@@ -15,10 +15,10 @@ public class MainPresenter extends BasePresenter<MainView.View> implements MainV
     }
 
     public MainPresenter() {
-        serviceManager = GithubManager.getInstance();
+        serviceManager = GithubServiceManager.getInstance();
     }
 
-    public void setManager(GithubManager manager) {
+    public void setManager(GithubServiceManager manager) {
         serviceManager = manager;
     }
 
@@ -42,7 +42,7 @@ public class MainPresenter extends BasePresenter<MainView.View> implements MainV
     @Override
     public void getUserInfo(String username) {
         getView().showProgressDialog();
-        GithubManager.getInstance().getUsername(username, new GithubManager.NetworkCallback() {
+        serviceManager.requestUserInfo(username, new GithubServiceManager.GithubManagerCallback() {
             @Override
             public void onSuccess(UserInfoDao body) {
                 getView().hideProgressDialog();

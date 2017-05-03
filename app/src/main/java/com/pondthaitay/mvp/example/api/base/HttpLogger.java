@@ -8,10 +8,6 @@ import com.google.gson.JsonSyntaxException;
 
 import okhttp3.logging.HttpLoggingInterceptor;
 
-/**
- * Created by jedsada on 5/3/17.
- */
-
 public class HttpLogger implements HttpLoggingInterceptor.Logger {
     private final static String TAG = HttpLogger.class.getSimpleName();
 
