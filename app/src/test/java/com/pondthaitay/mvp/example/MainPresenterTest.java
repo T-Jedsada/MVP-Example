@@ -1,5 +1,8 @@
 package com.pondthaitay.mvp.example;
 
+import com.pondthaitay.mvp.example.ui.MainPresenter;
+import com.pondthaitay.mvp.example.ui.MainView;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

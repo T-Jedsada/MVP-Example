@@ -1,4 +1,4 @@
-package com.pondthaitay.mvp.example;
+package com.pondthaitay.mvp.example.ui;
 
 import com.pondthaitay.mvp.example.base.BaseView;
 

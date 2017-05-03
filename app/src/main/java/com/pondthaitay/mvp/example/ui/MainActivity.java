@@ -1,8 +1,9 @@
-package com.pondthaitay.mvp.example;
+package com.pondthaitay.mvp.example.ui;
 
 import android.os.Bundle;
 import android.util.Log;
 
+import com.pondthaitay.mvp.example.R;
 import com.pondthaitay.mvp.example.base.BaseActivity;
 
 public class MainActivity extends BaseActivity<MainView.Presenter> implements MainView.View {
